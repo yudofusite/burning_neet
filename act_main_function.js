@@ -82,7 +82,7 @@ stg.font = "40px sans-serif";
 stg.letterSpacing = title_spacing + "px";
 stg.textAlign = "center";
 stg.fillText("タイトル考えてない", 400, 150);
-stg.font = "15px sans-serif";
+stg.font = "bold 15px sans-serif";
 stg.fillStyle = "#ff4040";
 stg.fillText("-Burning NEET", 600, 180);
 
@@ -1491,4 +1491,54 @@ function circle(sx, sy, sk, ss) {			//円描画(x,y,半径,スタイル（1=塗�
 		stg.stroke();
 		};
 };
+
+//----------------------------ステージ名
+
+let stagename = "";
+let stagecounter = 250;
+
+setInterval(function() {
+sne.clearRect(0, 0, 800, 300);
+
+if (stagecounter < 250) {
+	if (stagecounter < 50) {
+	sne.fillStyle = "#ff000080";
+	sne.fillRect(500 + (50 - stagecounter) * 7, 150, 300, 2);
+	sne.fillStyle = "#ffffffaa";
+	sne.font = "bold 17px sans-serif";
+	sne.fillText(stagename, 520 + (50 - stagecounter) * 7, 140);
+	};
+	if (stagecounter >= 50 && stagecounter < 200) {
+	sne.fillStyle = "#ff000080";
+	sne.fillRect(500, 150, 300, 2);
+	sne.fillStyle = "#ffffff";
+	sne.font = "bold 17px sans-serif";
+	sne.fillText(stagename, 520, 140);
+	};
+	if (stagecounter >= 200 && stagecounter < 250) {
+	sne.fillStyle = "#ff000080";
+	sne.fillRect(500 + (stagecounter - 200) * 7, 150, 300, 2);
+	sne.fillStyle = "#ffffff";
+	sne.font = "bold 17px sans-serif";
+	sne.fillText(stagename, 520 + (stagecounter - 200) * 10, 140);
+	};
+};
+stagecounter++;
+
+},1000 / 60);
+
+function s_n_e(sname) {		//ステージ名表示のやつ
+	stagename = sname;
+	stagecounter = 0;
+};
+
+let stagenamearray = [];
+
+function stageinfo(stext, mapnum) {
+	if (now_stage == mapnum && stagenamearray.includes(mapnum) == false) {
+	stagenamearray.push(mapnum);
+	s_n_e(stext);
+	};
+};
+
 

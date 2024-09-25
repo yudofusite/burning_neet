@@ -31,6 +31,12 @@ subm.setAttribute("width","300px");
 subm.setAttribute("height","500px");
 var sub = subm.getContext("2d");
 
+const snc = document.getElementById("stagename_canvas");
+snc.style.top = "200px";
+snc.setAttribute("width","800px");
+snc.setAttribute("height","300px");
+var sne = snc.getContext("2d");
+
 //-------------------------BGMとか？
 
 let bgm = new Audio();
@@ -40,7 +46,7 @@ bgm.loop = "true";
 window.addEventListener("click", function() {		//テストプレイ用クリック＆スキップ機能
 //bgm.play();
 now_stage += 3;
-
+stagecounter = 0;
 });
 
 
