@@ -83,6 +83,7 @@ stg.letterSpacing = title_spacing + "px";
 stg.textAlign = "center";
 stg.fillText("タイトル考えてない", 400, 150);
 stg.font = "15px sans-serif";
+stg.fillStyle = "#ff4040";
 stg.fillText("-Burning NEET", 600, 180);
 
 if (title_spacing > 10.3 && titleflag[0] == 0) {			//タイトルぐいーん
@@ -90,6 +91,7 @@ title_spacing -= (title_spacing - 10) / 7;
 } else {
 	if (titleflag[0] == 0) {
 	stg.font = "15px sans-serif";
+	stg.fillStyle = "#000040";
 	stg.letterSpacing = "5px";
 	stg.fillText("-PRESS SPACE KEY-", 400, 300);
 	};
@@ -1408,20 +1410,28 @@ function neos() {				//ニートオブムショーク
 			boss_x--;
 			} else {
 			boss_x++;
-				if (boss_x > 650) {
-				boss_x = 650;
+				if (boss_x > 600) {
+				boss_x = 600;
+				neos_hp[3] = 0;
 				};
 			};
 
-		if (y_n + 40 > boss_y + 3 && y_n < boss_y + 30 && neos_hp[2] < 1 && x_n + 20 > boss_x + 170 && x_n < boss_x + 230) {	//第一形態踏まれ判定
+		if (y_n + 40 > boss_y + 3 && y_n < boss_y + 20 && neos_hp[2] < 1 && x_n + 20 > boss_x + 170 && x_n < boss_x + 200) {	//第一形態踏まれ判定
 		y = -18;
 		neos_hp[2] = 20;
-		neos_hp[1] -= 1;
+		neos_hp[0] -= 1;
 		};
-
 		neos_hp[2]--;
 		neos_counter ++;
+		if (neos_hp[0] < 1) {
+		boss_b2 = 2;
+		neos_hp[0] = 30;
+		neos_hp[1] = 30;
 		};
+
+		};
+	};
+	if (boss_b2 == 2) {		//第二形態
 	};
 
 	if (neos_shot.length > 0) {		//砲撃とかね
