@@ -46,7 +46,6 @@ bgm.loop = "true";
 window.addEventListener("click", function() {		//テストプレイ用クリック＆スキップ機能
 //bgm.play();
 now_stage += 3;
-stagecounter = 0;
 });
 
 
