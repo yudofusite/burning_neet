@@ -20,6 +20,7 @@ sub.fillStyle = "#ffffff";
 sub.font = "13px sans-serif";
 sub.fillText("タイトル考えてない -Burning NEET", 10, 20);
 sub.fillText("version1.0C", 160, 35);
+sub.fillText("制作中", 160, 40);
 };
 
 
