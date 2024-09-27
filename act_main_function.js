@@ -1383,6 +1383,7 @@ boss_char_edit(5);
 let neos_hp = [20, 20, 0, 0];	//現在HP,最大HP,無敵時間,左（０）右（１）
 let neos_pat = 1;		//形態（行動パターン）
 let neos_counter = 0;
+let neos_counter2 = 0;
 let neos_shot = [];		//砲撃・ショット用[x,y,vx,vy,種類]
 function neos() {				//ニートオブムショーク
 	if (boss_b2 == 0) {
@@ -1393,10 +1394,10 @@ function neos() {				//ニートオブムショーク
 	};
 
 	if (boss_b2 == 1) {
-		if (neos_pat == 1) {
+		if (neos_pat == 1) {		//第一形態
 		boss_char_edit(9);
 
-			if (neos_counter > 50) {		//第一形態
+			if (neos_counter > 50) {
 			neos_counter = 0;
 			neos_shot.push([boss_x + 10, boss_y + 18, -10, 0, 1]);		//砲撃
 				if (boss_x + 60 < x_n) {
@@ -1421,18 +1422,82 @@ function neos() {				//ニートオブムショーク
 		neos_hp[2] = 20;
 		neos_hp[0] -= 1;
 		};
+		if (y_n + 40 > boss_y + 60 && y_n < boss_y + 80 && x_n + 20 > boss_x + 80 && x_n < boss_x + 100 && muteki_jikan < 1) {	//バンパー判定
+		x -= 25;
+		hp -= 2;
+		muteki_jikan = 7;
+		};
+
 		neos_hp[2]--;
 		neos_counter ++;
 		if (neos_hp[0] < 1) {
-		boss_b2 = 2;
+		neos_pat = 2;
+		neos_hp[0] = 30;
+		neos_hp[1] = 30;
+		};
+
+		};
+
+		if (neos_pat == 2) {		//第二形態
+		boss_char_edit(9);
+
+			if (neos_counter > 50) {
+			neos_counter = 0;
+			if (boss_x > 300) {
+			neos_shot.push([boss_x + 10, boss_y + 18, -4, -3, 1]);
+			neos_shot.push([boss_x + 10, boss_y + 18, -4, 3, 1]);
+			};
+			neos_shot.push([boss_x + 10, boss_y + 18, -10, 0, 1]);		//砲撃
+
+				if (boss_x + 60 < x_n) {
+				neos_hp[3] = 1;
+				} else {
+				neos_hp[3] = 0;
+				};
+			};
+
+			if (neos_counter2 % 200 == 0) {					//炸裂弾
+			neos_shot.push([boss_x + 100, boss_y, 0, -3, 2]);
+			};
+
+			if (neos_hp[3] == 0) {
+			boss_x -= 2;
+			if (boss_x < 100) {
+				boss_x = 100;
+				neos_hp[3] = 1;
+				};
+			} else {
+			boss_x += 2;
+				if (boss_x > 600) {
+				boss_x = 600;
+				neos_hp[3] = 0;
+				};
+			};
+
+		if (y_n + 40 > boss_y + 3 && y_n < boss_y + 20 && neos_hp[2] < 1 && x_n + 20 > boss_x + 170 && x_n < boss_x + 200) {	//第二形態踏まれ判定
+		y = -18;
+		neos_hp[2] = 20;
+		neos_hp[0] -= 1;
+		};
+		if (y_n + 40 > boss_y + 60 && y_n < boss_y + 80 && x_n + 20 > boss_x + 80 && x_n < boss_x + 100 && muteki_jikan < 1) {	//バンパー判定
+		x -= 25;
+		hp -= 3;
+		muteki_jikan = 5;
+		};
+
+		neos_hp[2]--;
+		neos_counter ++;
+		neos_counter2 ++;
+
+		if (neos_hp[0] < 1) {
+		neos_pat = 3;
 		neos_hp[0] = 30;
 		neos_hp[1] = 30;
 		};
 
 		};
 	};
-	if (boss_b2 == 2) {		//第二形態
-	};
+
 
 	if (neos_shot.length > 0) {		//砲撃とかね
 		for (let nesi = 0; nesi < neos_shot.length; nesi++) {
@@ -1441,8 +1506,7 @@ function neos() {				//ニートオブムショーク
 			bsg.fillStyle = "#303030";
 			circle(neos_shot[nesi][0], neos_shot[nesi][1], 6, 1);
 			};
-		neos_shot[nesi][0] += neos_shot[nesi][2];
-		neos_shot[nesi][1] += neos_shot[nesi][3];
+
 			if (neos_shot[nesi][0] < -20) {
 			neos_shot.splice(nesi, 1);
 			nesi--;
@@ -1456,6 +1520,33 @@ function neos() {				//ニートオブムショーク
 				hp -= 15;
 			};
 			};
+
+			if (neos_shot[nesi][4] == 2) {
+			bsg.fillStyle = "#800000";
+			circle(neos_shot[nesi][0], neos_shot[nesi][1], 10, 1);
+
+			if (neos_shot[nesi][1] < 20) {
+			var n_s_2 = neos_shot[nesi][0];
+			neos_shot.splice(nesi, 1);
+			neos_shot.push([n_s_2, 20, -4, 3, 3]);
+			neos_shot.push([n_s_2, 20, -2, 4, 3]);
+			neos_shot.push([n_s_2, 20, 2, 4, 3]);
+			neos_shot.push([n_s_2, 20, 4, 3, 3]);
+			nesi -= 3;
+			};
+
+			};
+
+			if (neos_shot[nesi][4] == 3) {
+			bsg.fillStyle = "ff0000";
+			circle(neos_shot[nesi][0], neos_shot[nesi][1], 3, 1);
+				if (neos_shot[nesi][1] > 600) {
+				neos_shot.splice(nesi, 1);
+				};
+			};
+
+		neos_shot[nesi][0] += neos_shot[nesi][2];
+		neos_shot[nesi][1] += neos_shot[nesi][3];
 
 		};
 	};
@@ -1495,6 +1586,7 @@ function circle(sx, sy, sk, ss) {			//円描画(x,y,半径,スタイル（1=塗�
 //----------------------------ステージ名
 
 let stagename = "";
+let subname = "";
 let stagecounter = 250;
 
 setInterval(function() {
@@ -1502,11 +1594,14 @@ sne.clearRect(0, 0, 800, 300);
 
 if (stagecounter < 250) {
 	if (stagecounter < 50) {
-	sne.fillStyle = "#ff000080";
+	sne.fillStyle = "#ff000040";
 	sne.fillRect(500 + (50 - stagecounter) * 7, 150, 300, 2);
+	sne.fillRect(500 + (50 - stagecounter) * 8, 150, 300, 2);
 	sne.fillStyle = "#ffffffaa";
 	sne.font = "bold 17px sans-serif";
 	sne.fillText(stagename, 520 + (50 - stagecounter) * 7, 140);
+	sne.font = "12px sans-serif";
+	sne.fillText("─" + subname, 530 + (50 - stagecounter) * 7, 165);
 	};
 	if (stagecounter >= 50 && stagecounter < 200) {
 	sne.fillStyle = "#ff000080";
@@ -1514,30 +1609,36 @@ if (stagecounter < 250) {
 	sne.fillStyle = "#ffffff";
 	sne.font = "bold 17px sans-serif";
 	sne.fillText(stagename, 520, 140);
+	sne.font = "bold 12px sans-serif";
+	sne.fillText("─" + subname, 530, 165);
 	};
 	if (stagecounter >= 200 && stagecounter < 250) {
-	sne.fillStyle = "#ff000080";
+	sne.fillStyle = "#ff000040";
 	sne.fillRect(500 + (stagecounter - 200) * 7, 150, 300, 2);
+	sne.fillRect(500 + (stagecounter - 200) * 10, 150, 300, 2);
 	sne.fillStyle = "#ffffff";
 	sne.font = "bold 17px sans-serif";
 	sne.fillText(stagename, 520 + (stagecounter - 200) * 10, 140);
+	sne.font = "12px sans-serif";
+	sne.fillText("─" + subname, 530 + (stagecounter - 200) * 6, 165);
 	};
 };
 stagecounter++;
 
 },1000 / 60);
 
-function s_n_e(sname) {		//ステージ名表示のやつ
+function s_n_e(sname, ssname) {		//ステージ名表示のやつ
 	stagename = sname;
+	subname = ssname;
 	stagecounter = 0;
 };
 
 let stagenamearray = [];
 
-function stageinfo(stext, mapnum) {
+function stageinfo(stext, sstext, mapnum) {
 	if (now_stage == mapnum && stagenamearray.includes(mapnum) == false) {
 	stagenamearray.push(mapnum);
-	s_n_e(stext);
+	s_n_e(stext, sstext);
 	};
 };
 
