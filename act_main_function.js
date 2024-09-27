@@ -1457,7 +1457,7 @@ function neos() {				//ニートオブムショーク
 			};
 
 			if (neos_counter2 % 200 == 0) {					//炸裂弾
-			neos_shot.push([boss_x + 100, boss_y, 0, -3, 2]);
+			neos_shot.push([boss_x + 150, boss_y, 0, -5, 2]);
 			};
 
 			if (neos_hp[3] == 0) {
@@ -1490,11 +1490,38 @@ function neos() {				//ニートオブムショーク
 		neos_counter2 ++;
 
 		if (neos_hp[0] < 1) {
-		neos_pat = 3;
+		neos_pat = 2.5;
+		neos_counter = 0;
 		neos_hp[0] = 30;
 		neos_hp[1] = 30;
 		};
 
+		};
+
+		if (neos_pat == 2.5) {		//第三形態移行時演出前半
+		boss_char_edit(9);
+		boss_x += neos_counter;
+			if (boss_x > 820) {
+			neos_pat = 2.7;
+			boss_x = 600;
+			boss_y = -200;
+			neos_counter = 0;
+			};
+		neos_counter ++;
+		};
+
+		if (neos_pat == 2.7) {		//第三形態移行時演出後半
+		boss_char_edit(10 + gk(neos_counter));
+		boss_y += neos_counter / 3;
+		neos_counter ++;
+			if (boss_y > 500) {
+			neos_pat = 3;
+			boss_y = 500;
+			neos_counter = 0;
+			};
+		};
+
+		if (neos_pat == 3) {
 		};
 	};
 
@@ -1503,7 +1530,7 @@ function neos() {				//ニートオブムショーク
 		for (let nesi = 0; nesi < neos_shot.length; nesi++) {
  
 			if (neos_shot[nesi][4] == 1) {
-			bsg.fillStyle = "#303030";
+			stg.fillStyle = "#303030";
 			circle(neos_shot[nesi][0], neos_shot[nesi][1], 6, 1);
 			};
 
@@ -1522,7 +1549,7 @@ function neos() {				//ニートオブムショーク
 			};
 
 			if (neos_shot[nesi][4] == 2) {
-			bsg.fillStyle = "#800000";
+			stg.fillStyle = "#800000";
 			circle(neos_shot[nesi][0], neos_shot[nesi][1], 10, 1);
 
 			if (neos_shot[nesi][1] < 20) {
@@ -1538,11 +1565,16 @@ function neos() {				//ニートオブムショーク
 			};
 
 			if (neos_shot[nesi][4] == 3) {
-			bsg.fillStyle = "ff0000";
+			stg.fillStyle = "#ff0000";
 			circle(neos_shot[nesi][0], neos_shot[nesi][1], 3, 1);
 				if (neos_shot[nesi][1] > 600) {
 				neos_shot.splice(nesi, 1);
 				};
+			if (neos_shot[nesi][0] - 2 < x_n + 20 && neos_shot[nesi][0] + 2 > x_n && neos_shot[nesi][1] - 3 < y_n + 38 && neos_shot[nesi][1] + 3 > y_n && muteki_jikan < 1) {
+				muteki_jikan = 20;
+				hp -= 3;
+			};
+
 			};
 
 		neos_shot[nesi][0] += neos_shot[nesi][2];
