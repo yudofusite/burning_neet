@@ -40,7 +40,7 @@ var sne = snc.getContext("2d");
 //-------------------------BGMとか？
 
 let bgm = new Audio();
-bgm.src = "normal_field.mp3";
+bgm.src = "running_neet.mp3";
 bgm.loop = "true";
 
 window.addEventListener("click", function() {		//テストプレイ用クリック＆スキップ機能

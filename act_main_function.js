@@ -964,10 +964,8 @@ let boss_char_gra = [
 [" 　∧ ∧","　(,ﾟДﾟ)","　⊂　　⊃","～｜＿ |　","　 U　U"],
 [" 　∧ ∧","　(,ﾟДﾟ)"," ⊂　　⊃=","ー｜＿ |　","　 U　U"],
 ["             　　　　　　 (·ω·`)"," ___________/￣￣|_____/￣|","└───────|___________|","  　　        /￣￣￣￣￣￣￣￣￣￣￣￣￣|"," 　　　　 <||_  _  _  _  _  _   _  _  _/","　   　     <j|_________________/"],
-[" 　　 _/￣￣|","　　/ (·ω·`)	  /"," /￣￣| 　  |/￣￣￣/"," ￣ ￣| 神  |￣￣ ￣","  /　 |_____|   /","　　　　|||","　　　　^ ^"],		//ニートオブ　１０
-[" 　　 _/￣￣|","　　/ (·ω·`)	  /"," /￣￣| 　  |/￣￣￣/"," ￣/￣| 神  |￣￣/￣","   　 |_____|","　　　　|||","　　　　 ^"],
-[" 　　  _/￣|"," 　  / (·ω·`)	      /"," /￣￣| 　  |/￣￣￣/","  ￣ ￣| 神  |￣￣ ￣","   /    |___|   /","　　　　|||","　　　  ^ ^"],
-[" 　　  _/￣|"," 　  / (·ω·`)	      /","/￣￣| 　   |/￣￣￣/","￣/ ￣| 神  |￣￣/￣","         |___|","　　　　|||","　　　    ^"],
+[" 　　  _/￣|"," 　  / (·ω·`)	      /","/￣￣| 　   |/￣￣￣/","  ￣ ￣| 神  |￣￣ ￣","   /    |___|    /","　　　　|||","　　　  ^ ^"],		//ニートオブ　１０
+[" 　　  _/￣|"," 　  / (·ω·`)	      /","/￣￣| 　   |/￣￣￣/"," ￣/￣| 神  |￣￣/￣","         |___|","　　　　|||","　　　    ^"],
 
 ];
 
@@ -1492,7 +1490,7 @@ function neos() {				//ニートオブムショーク
 		if (neos_hp[0] < 1) {
 		neos_pat = 2.5;
 		neos_counter = 0;
-		neos_hp[0] = 30;
+		neos_hp[0] = 0;
 		neos_hp[1] = 30;
 		};
 
@@ -1514,14 +1512,35 @@ function neos() {				//ニートオブムショーク
 		boss_char_edit(10 + gk(neos_counter));
 		boss_y += neos_counter / 3;
 		neos_counter ++;
-			if (boss_y > 500) {
+			if (neos_hp[0] < 30) {
+			neos_hp[0]++;
+			};
+			if (boss_y > 300) {
 			neos_pat = 3;
-			boss_y = 500;
+			boss_y = 300;
 			neos_counter = 0;
+			neos_counter2 = 0;
+			neos_hp[3] = 0;
 			};
 		};
 
-		if (neos_pat == 3) {
+		if (neos_pat == 3) {		//第三形態
+		neos_shot = [];
+		boss_y = 300 + Math.sin(neos_counter / 20) * 40;
+		boss_char_edit(10 + gk(neos_counter));
+		if (neos_hp[3] == 0) {
+	q	boss_x -= 1;
+		} else {
+		boss_x += 1;
+		};
+		if (boss_x < 100) {
+		neos_hp[3] = 0;
+		};
+		if (boss_x > 460) {
+		neos_hp[3] = 1;
+		};
+		neos_counter ++;
+		neos_counter2 ++;
 		};
 	};
 
@@ -1532,13 +1551,6 @@ function neos() {				//ニートオブムショーク
 			if (neos_shot[nesi][4] == 1) {
 			stg.fillStyle = "#303030";
 			circle(neos_shot[nesi][0], neos_shot[nesi][1], 6, 1);
-			};
-
-			if (neos_shot[nesi][0] < -20) {
-			neos_shot.splice(nesi, 1);
-			nesi--;
-			};
-			if (neos_shot[nesi][4] == 1) {
 			if (neos_shot[nesi][0] - 10 < x_n + 20 && neos_shot[nesi][0] + 10 > x_n && neos_shot[nesi][1] - 10 < y_n + 38 && neos_shot[nesi][1] + 6 > y_n && muteki_jikan < 1) {
 	
 				muteki_jikan = 20;
@@ -1546,6 +1558,11 @@ function neos() {				//ニートオブムショーク
 				y -= 8;
 				hp -= 15;
 			};
+			};
+
+			if (neos_shot[nesi][0] < -20) {
+			neos_shot.splice(nesi, 1);
+			//nesi--;
 			};
 
 			if (neos_shot[nesi][4] == 2) {
@@ -1559,7 +1576,7 @@ function neos() {				//ニートオブムショーク
 			neos_shot.push([n_s_2, 20, -2, 4, 3]);
 			neos_shot.push([n_s_2, 20, 2, 4, 3]);
 			neos_shot.push([n_s_2, 20, 4, 3, 3]);
-			nesi -= 3;
+			//nesi -= 3;
 			};
 
 			};
