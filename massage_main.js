@@ -1,5 +1,6 @@
 let massage_func_t = [0, 12, 19, 28];			//表示待ちのメッセージ番号
-let massage_talk_t = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
+let massage_talk_t = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+let already_talk = [];		//すでに表示したメッセージ内容
 let bg_func_t = [12, 17, 19, 27, 28];				//背景変更待ちのマップ番号
 let massage_func_f = 0;				//メッセージ表示終了検知用
 
@@ -45,12 +46,13 @@ print_talk2("逝ってヨシ！！！", 36, giko_hp[0], 0, 1, 10, 2);
 
 print_talk("見かけない顔だね", 40, 12, 1);
 print_talk("ちょっとそこどいてくれる？", 40, 13, 1);
+print_talk2("手加減くらいしろや！いい加減にしろ棒人間！", 40, neos_pat, 5, 0, 14, 3);
 
 boss_sen(1, massage_talk_t[0], 4, 0);		//ボス戦況（boss_b2）変更用。（boss_b2の数値, 条件1,条件2, boss_b2を変えるとき（変える前）のboss_b2の値）
 boss_sen(1, massage_talk_t[0], 10, 0);		//ぎこ開始
 boss_sen(1, massage_talk_t[0], 14, 0);		//ニートオブムーショック開始
 
-stageinfo("STAGE1 無職による無職への突撃", 0);	//（STAGE名、MAP番号）
+stageinfo("STAGE1 無職による無職への突撃", "NEET killer NEET", 0);	//（STAGE名、MAP番号）
 
 },1000 / 60);
 
@@ -184,7 +186,7 @@ move_ok = 1;
 
 	};
 
-	}, 1000 / 30);
+	}, 1000 / 100);		//30がデフォルト
 
 };
 

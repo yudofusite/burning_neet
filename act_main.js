@@ -43,6 +43,9 @@ let bgm = new Audio();
 bgm.src = "running_neet.mp3";
 bgm.loop = "true";
 
+let die = new Audio();
+die.src = "dead.wav";
+
 window.addEventListener("click", function() {		//テストプレイ用クリック＆スキップ機能
 //bgm.play();
 now_stage += 3;

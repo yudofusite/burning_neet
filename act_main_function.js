@@ -674,6 +674,7 @@ if (move_ok == 1) {
 	x = 0;
 	y = 0;
 	power -= 1000;
+	die.play();
 	hp = 50;
 
 	};
@@ -949,6 +950,10 @@ stg.stroke();
 function gk(suji) {		//偶数(0)奇数(1)判定
 return suji % 2;
 };
+
+function rnd(max) {	//ランダム（整数）
+  return Math.floor(Math.random() * max);
+}
 
 //--------------------------------------------------ボス描画部分↓
 
@@ -1521,26 +1526,63 @@ function neos() {				//ニートオブムショーク
 			neos_counter = 0;
 			neos_counter2 = 0;
 			neos_hp[3] = 0;
+			neos_shot = [];
 			};
 		};
 
 		if (neos_pat == 3) {		//第三形態
-		neos_shot = [];
-		boss_y = 300 + Math.sin(neos_counter / 20) * 40;
+		boss_y = 300 + Math.sin(neos_counter / 20) * 80;
 		boss_char_edit(10 + gk(neos_counter));
 		if (neos_hp[3] == 0) {
-	q	boss_x -= 1;
+		boss_x -= 2;
+			if (neos_counter2 % 80 == 0) {			//右向き時の弾（しょぼんレーザー）
+			neos_shot.push([boss_x, boss_y, 0.2, -1, 4]);
+			neos_shot.push([boss_x, boss_y, 0.15, -1.5, 4]);
+			neos_shot.push([boss_x, boss_y, 0.1, -1.7, 4]);
+			};
 		} else {
-		boss_x += 1;
+		boss_x += 3;
+			if (neos_counter2 % 70 == 0) {			//左向きのとき（しょぼんの拡散滅多撃ち）
+			neos_shot.push([boss_x, boss_y, 0, -4, 6]);
+			};
 		};
 		if (boss_x < 100) {
-		neos_hp[3] = 0;
-		};
-		if (boss_x > 460) {
 		neos_hp[3] = 1;
+		boss_x = 100;
 		};
+		if (boss_x > 600) {
+		neos_hp[3] = 0;
+		boss_x = 600;
+		};
+		if (y_n + 40 > boss_y + 3 && y_n < boss_y + 45 && neos_hp[2] < 1 && x_n + 20 > boss_x + 50 && x_n < boss_x + 90) {	//第三形態踏まれ判定
+		y = -16;
+		neos_hp[2] = 10;
+		neos_hp[0] -= 1;
+		};
+			if (neos_hp[0] < 1) {	//撃破
+			move_ok = 0;
+			neos_hp[0] = 0;
+			neos_pat = 4;
+			neos_shot = [];
+			};
+		neos_hp[2] -= 1;
 		neos_counter ++;
 		neos_counter2 ++;
+		};
+
+		if (neos_pat == 4) {
+		boss_y += 0.6;
+		if (gk(neos_counter) == 1) {
+		boss_char_edit(10);
+		};
+		neos_shot.push([boss_x + rnd(170), boss_y + rnd(100), 0, 0, 7]);	//(爆発x,y,爆発の進行度合い,（なし）,7)
+		neos_counter ++;
+			if (boss_y > 580) {
+			console.log("-ニートオブムショーク撃破");
+			neos_pat = 5;
+			neos_shot = [];
+			boss_b2 = 0;
+			};
 		};
 	};
 
@@ -1588,12 +1630,78 @@ function neos() {				//ニートオブムショーク
 				neos_shot.splice(nesi, 1);
 				};
 			if (neos_shot[nesi][0] - 2 < x_n + 20 && neos_shot[nesi][0] + 2 > x_n && neos_shot[nesi][1] - 3 < y_n + 38 && neos_shot[nesi][1] + 3 > y_n && muteki_jikan < 1) {
-				muteki_jikan = 20;
-				hp -= 3;
+				muteki_jikan = 5;
+				hp -= 6;
 			};
 
 			};
 
+			if (neos_shot[nesi][4] == 4) {
+				if (neos_shot[nesi][1] >= 50) {
+				stg.fillStyle = "#ffffffaa";
+				stg.strokeStyle = "#ccccff80";
+				stg.lineWidth = 1;
+				circle(neos_shot[nesi][0], neos_shot[nesi][1], 5 * (50 / neos_shot[nesi][1]), 3);
+				};
+				if (neos_shot[nesi][1] < 50) {
+				var n_s_2 = neos_shot[nesi][0];
+				neos_shot.splice(nesi, 1);
+				neos_shot.push([n_s_2, 50, 1, 4, 5]);
+				};
+			};
+			if (neos_shot[nesi][4] == 5) {
+				bsg.strokeStyle = "#0000ff60";
+				bsg.lineWidth = 4;
+				bsg.beginPath();
+				bsg.moveTo(neos_shot[nesi][0], neos_shot[nesi][1]);
+				bsg.lineTo(neos_shot[nesi][0] - (neos_shot[nesi][2] * 5), neos_shot[nesi][1] - (neos_shot[nesi][3] * 5));
+				bsg.closePath();
+				bsg.stroke();
+				bsg.strokeStyle = "#ffffff";
+				bsg.lineWidth = 2;
+				bsg.beginPath();
+				bsg.moveTo(neos_shot[nesi][0], neos_shot[nesi][1]);
+				bsg.lineTo(neos_shot[nesi][0] - (neos_shot[nesi][2] * 5), neos_shot[nesi][1] - (neos_shot[nesi][3] * 5));
+				bsg.closePath();
+				bsg.stroke();
+					if (neos_shot[nesi][0] - 2 < x_n + 20 && neos_shot[nesi][0] + 2 > x_n && neos_shot[nesi][1] - 20 < y_n + 38 && neos_shot[nesi][1] + 6 > y_n && muteki_jikan < 1) {
+					muteki_jikan = 20;
+					hp -= 30;
+					};
+				neos_shot[nesi][3] += neos_shot[nesi][3] / 10;
+				if (neos_shot[nesi][1] > 820) {
+				neos_shot.splice(nesi, 1);
+				};
+			};
+			if (neos_shot[nesi][4] == 6) {
+				bsg.fillStyle = "#ff0000";
+				bsg.fillRect(neos_shot[nesi][0], neos_shot[nesi][1], 2, 6);
+				if (neos_shot[nesi][1] < 100) {
+				var n_s_2 = neos_shot[nesi][0];
+				neos_shot.splice(nesi, 1);
+				neos_shot.push([n_s_2, 100, 8, 8, 3]);
+				neos_shot.push([n_s_2, 100, 8, 5, 3]);
+				neos_shot.push([n_s_2, 100, 5, 3, 3]);
+				neos_shot.push([n_s_2, 100, 3, 2, 3]);
+				neos_shot.push([n_s_2, 100, -3, 2, 3]);
+				neos_shot.push([n_s_2, 100, -5, 3, 3]);
+				neos_shot.push([n_s_2, 100, -8, 5, 3]);
+				neos_shot.push([n_s_2, 100, -8, 8, 3]);
+				neos_shot.push([n_s_2, 100, 1, 3, 3]);
+				neos_shot.push([n_s_2, 100, 1, 4, 3]);
+				neos_shot.push([n_s_2, 100, -1, 3, 3]);
+				neos_shot.push([n_s_2, 100, -1, 4, 3]);
+				};
+			};
+			if (neos_shot[nesi][4] == 7) {
+			stg.fillStyle = "#ff0000";
+			circle(neos_shot[nesi][0], neos_shot[nesi][1], neos_shot[nesi][2] / 1.8, 1);
+			neos_shot[nesi][2] ++;
+			neos_shot[nesi][0] -= neos_shot[nesi][2];
+				if (neos_shot[nesi][2] > 30) {
+				neos_shot.splice(nesi, 1);
+				};
+			};
 		neos_shot[nesi][0] += neos_shot[nesi][2];
 		neos_shot[nesi][1] += neos_shot[nesi][3];
 

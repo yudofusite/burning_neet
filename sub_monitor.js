@@ -11,6 +11,9 @@ sub.strokeRect(2, 2, 296, 496);
 
 let section_name = ["( ᐛ )城　入口","٩( ᐛ )و城　連絡トンネル","٩( ᐛ )و城　本館連絡橋","٩( ᐛ )و城　入口"];
 
+
+
+
 setInterval(function() {
 sub.clearRect(0, 0, 300, 500);
 bg();
