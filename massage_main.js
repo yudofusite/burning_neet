@@ -1,7 +1,7 @@
 let massage_func_t = [0, 12, 19, 28];			//表示待ちのメッセージ番号
 let massage_talk_t = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
 let already_talk = [];		//すでに表示したメッセージ内容
-let bg_func_t = [12, 17, 19, 27, 28];				//背景変更待ちのマップ番号
+let bg_func_t = [12, 17, 19, 27, 28, 41];				//背景変更待ちのマップ番号
 let massage_func_f = 0;				//メッセージ表示終了検知用
 
 let boss_func_f = [17, 27, 36, 40];			//ボス出す奴
@@ -27,6 +27,7 @@ bg_ch(1.5, 17);
 bg_ch(2, 19);
 bg_ch(2.5, 27);
 bg_ch(3, 28);
+bg_ch(2.5, 41);
 
 boss_das(1, 17);		//ボス出すやつ　（ボス番号,マップ番号）
 boss_das(2, 27);
@@ -53,6 +54,7 @@ boss_sen(1, massage_talk_t[0], 10, 0);		//ぎこ開始
 boss_sen(1, massage_talk_t[0], 14, 0);		//ニートオブムーショック開始
 
 stageinfo("STAGE1 無職による無職への突撃", "NEET killer NEET", 0);	//（STAGE名、MAP番号）
+stageinfo("STAGE2 勤労の義務を拒む者たち", "Refusal of labor obligations", 41);
 
 },1000 / 60);
 
