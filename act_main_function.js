@@ -498,7 +498,7 @@ y = 0;
 
 } else {
 
-y_n += 2;
+y_n += 1;
 
 
 };
@@ -637,11 +637,11 @@ addEventListener("keyup", function(event) {	//操作。同時押し対応
 setInterval(function () {	//動作部分。60fps
 if (move_ok == 1) {
 	if (lek) {
-	x += 3;
+	x += 2.8;
 	power++
 	};
 	if (rik) {
-	x -= 3;
+	x -= 2.8;
 	power++
 	};
 

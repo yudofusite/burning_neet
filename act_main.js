@@ -40,7 +40,7 @@ var sne = snc.getContext("2d");
 //-------------------------BGMとか？
 
 let bgm = new Audio();
-bgm.src = "running_neet.mp3";
+bgm.src = "nanda_koitsu.mp3";
 bgm.loop = "true";
 
 let die = new Audio();
