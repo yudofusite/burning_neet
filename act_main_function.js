@@ -139,6 +139,7 @@ function stage_edit_main() {
 
 
 let edit_array = [0, 1];	//地形カウンター反復(120fごと)
+let editco = 0;
 let stone = new Image();
 stone.src = "stone.png";
 stone.width = "20px";
@@ -161,6 +162,7 @@ edit_array[0]--
 	};
 };
 
+editco++;		//エディット回数（フレーム数）カウンター
 
 let edit_x = 0;
 let edit_y = 0;
@@ -357,8 +359,6 @@ edit_y = date_stage[ang_stg][0];
 		if (edit_array[0] < 50) {
 
 		stg.fillStyle = "#200060";
-
-
 		stg.fillRect(edit_x, edit_y, 20, 20);
 		stg.strokeStyle = "#000030";
 		stg.strokeRect(edit_x, edit_y, 20, 20);
@@ -377,8 +377,26 @@ edit_y = date_stage[ang_stg][0];
 		};
 		
 	};
+	if (date_stage[ang_stg][i] == 17) {		//流水(判定なし)
+	stg.fillStyle = "#00aaea70";	
+	stg.fillRect(edit_x, edit_y, 20, 20);
+	stg.strokeStyle = "#ffffffaa";
+	stg.lineWidth = 3;
+	stg.beginPath();
+	stg.moveTo(edit_x, edit_y + (editco / 1.5 % 20));
+		for (let ei = 1; ei < 5; ei++) {
+		stg.lineTo(edit_x + (ei * 4), edit_y + (editco / 1.5 % 20) + (4 - rnd(6)));
+		};
+		stg.lineTo(edit_x + 20, edit_y + (editco / 1.5 % 20));
 
-
+	stg.moveTo(edit_x, edit_y + (editco / 1.5 % 20));
+	stg.closePath();
+	stg.stroke();
+	};
+	if (date_stage[ang_stg][i] == 18) {		//消滅足場(e_a 51-100_?)
+	stg.fillStyle = "#00aaea70";
+	stg.fillRect(edit_x, edit_y, 20, 20);	
+	};
 
 	edit_x += 20;
 	if (edit_x >= 790) {
@@ -387,6 +405,7 @@ edit_y = date_stage[ang_stg][0];
 	};
 
 	};
+
 
 };
 
@@ -537,11 +556,12 @@ x = 0;
 };
 
 if (st_hit(now_stage) == 2) {			//マグマとかの死亡判定
-	y_n = date_stage[now_stage][0] - 45;
-	x_n = 0;
-	x = 0;
-	y = 0;
-	power -= 800;
+	//y_n = date_stage[now_stage][0] - 45;
+	//x_n = 0;
+	//x = 0;
+	//y = 0;
+	//power -= 800;
+	hp = 0;
 };
 
 if (st_hit(now_stage, 2) == 3) {		//針判定
@@ -576,10 +596,18 @@ y_n += y;
 	power -= 800;
 	};
 
+if (st_hit(now_stage, 4) == 5) {
+x *= 0.94;
+} else if (player_kansei == 0) { 
+x *= 0.6;
+} else {
+x *= 0.9;
+};
 
-x *= 0.6;	//減速用
 if (upk == true) {
 y += 0.6;
+} else if (st_hit(now_stage, 4) == 5) {
+y += 0.4;
 } else {
 y += 1;
 };
@@ -587,6 +615,35 @@ y += 1;
 	y = 5;
 	};
 };
+
+const kanseibutton = document.getElementById("kansei");
+let player_kansei = 0;		//慣性ON（１）・OFF（２）
+
+addEventListener("keydown", function(event0) {
+	if (event.key == "p") {
+		if (player_kansei == 0) {
+		player_kansei = 1;
+		kanseibutton.style.background = "#0000ff";
+		kanseibutton.textContent = "慣性をOFF (p)";
+		} else {
+		player_kansei = 0;
+		kanseibutton.style.background = "#ff0000";
+		kanseibutton.textContent = "慣性をON (p)";
+		};
+		console.log(player_kansei);
+	};
+});
+kanseibutton.addEventListener("click", function() {
+		if (player_kansei == 0) {
+		player_kansei = 1;
+		kanseibutton.style.background = "#0000ff";
+		kanseibutton.textContent = "慣性をOFF (p)";
+		} else {
+		player_kansei = 0;
+		kanseibutton.style.background = "#ff0000";
+		kanseibutton.textContent = "慣性をON (p)";
+		};
+});
 
 
 let lek = false;
@@ -637,11 +694,23 @@ addEventListener("keyup", function(event) {	//操作。同時押し対応
 setInterval(function () {	//動作部分。60fps
 if (move_ok == 1) {
 	if (lek) {
+	if (st_hit(now_stage, 4) == 5) {
+	x += 0.6;
+	} else if (player_kansei == 0) {
 	x += 2.8;
+	} else {
+	x += 1;
+	};
 	power++
 	};
 	if (rik) {
+	if (st_hit(now_stage, 4) == 5) {
+	x -= 0.6;
+	} else if (player_kansei == 0) {
 	x -= 2.8;
+	} else {
+	x -= 1;
+	};
 	power++
 	};
 
@@ -653,6 +722,14 @@ if (move_ok == 1) {
 			y_n -= 10;
 			jump.play()
 			};
+		} else if (st_hit(now_stage, 4) == 5) {
+			y_n -= 10;
+			if (st_hit(now_stage, 4) == 5) {
+			y_n += 10;
+			y = -9;
+			} else {
+			y_n += 10;
+			};
 		};
 	};
 
@@ -663,8 +740,15 @@ if (move_ok == 1) {
 	power = 0;
 	};
 
-
-
+	if (st_hit(now_stage, 4) == 5 && y > 3) {
+	y = 2;
+	};
+	if (st_hit(now_stage, 4) == 5 && x > 2.7) {
+	x = 2.7;
+	};
+	if (st_hit(now_stage, 4) == 5 && x < -2.7) {
+	x = -2.7;
+	};
 
 	if (hp < 1) {			//ダメージによる死亡判定・モーションとか？
 	move_ok = 2;
@@ -694,11 +778,13 @@ let hit_y = 0;
 let hit = 0;
 let dmg_ne = 0;
 let jump_die = 0;
+let water_hit = 0;
 
 function st_hit(stb, modehit) {			//当たり判定部分(返り値、当たっている場合はt,そうでない場合はfを返す。
 hit = 0;
 dmg_ne = 0;
 jump_die = 0;
+water_hit = 0;
 hit_x = 0;
 hit_y = date_stage[stb][0];	//走査開始位置指定
 
@@ -722,7 +808,7 @@ for (let i3 = 1; i3 < date_stage[stb].length; i3++) {
 		};
 	};
 	if (date_stage[stb][i3] == 5) {								//マグマーー！！
-		if (hit_x <= x_n + 20 && x_n <= hit_x + 20 && hit_y <= y_n + 40 && hit_y + 19 >= y_n) {	
+		if (hit_x <= x_n + 17 && x_n <= hit_x + 17 && hit_y <= y_n + 30 && hit_y + 15 >= y_n) {	
 		hit = 2;
 	
 		};
@@ -779,7 +865,11 @@ for (let i3 = 1; i3 < date_stage[stb].length; i3++) {
 	
 		};
 	};
-
+	if (date_stage[stb][i3] == 18) {			//水判定！！
+		if (hit_x <= x_n + 20 && x_n <= hit_x + 20 && hit_y <= y_n + 40 && hit_y + 19 >= y_n) {
+		water_hit = 1;
+		};
+	};
 
 hit_x += 20;
 	if (hit_x >= 800) {
@@ -792,6 +882,12 @@ hit_x += 20;
 if (jump_die == 1) {
 if (modehit == 3) {
 return 4;
+};
+};
+
+if (water_hit == 1) {
+if (modehit == 4) {
+return 5;
 };
 };
 
@@ -812,6 +908,8 @@ return 1;
 return hit;
 };
 };
+
+
 
 };
 
