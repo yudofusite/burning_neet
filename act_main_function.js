@@ -393,9 +393,22 @@ edit_y = date_stage[ang_stg][0];
 	stg.closePath();
 	stg.stroke();
 	};
-	if (date_stage[ang_stg][i] == 18) {		//消滅足場(e_a 51-100_?)
+	if (date_stage[ang_stg][i] == 18) {		//水
 	stg.fillStyle = "#00aaea70";
 	stg.fillRect(edit_x, edit_y, 20, 20);	
+	};
+	if (date_stage[ang_stg][i] == 19) {		//水面
+	stg.fillStyle = "#00aaea70";
+	stg.beginPath();
+	stg.lineTo(edit_x + 20, edit_y + 20);
+	stg.moveTo(edit_x, edit_y + 20);
+	stg.lineTo(edit_x, edit_y + 10 - (Math.sin(editco / 15) * 1.5));
+		for (let eiw = 1; eiw <= 10; eiw++) {
+		stg.lineTo(edit_x + (eiw * 2), edit_y + 10 - (Math.sin(editco / 15 + eiw * 1.3) * 1.5));
+		};
+	stg.lineTo(edit_x + 20, edit_y + 20);
+	stg.closePath();
+	stg.fill();
 	};
 
 	edit_x += 20;
@@ -572,7 +585,7 @@ x = 0;
 };
 };
 
-if (st_hit(now_stage, 3) == 4) {
+if (st_hit(now_stage, 3) == 4) {	//ジャンプ台
 y = -25;
 };
 
@@ -691,7 +704,7 @@ addEventListener("keyup", function(event) {	//操作。同時押し対応
 });
 
 
-setInterval(function () {	//動作部分。60fps
+setInterval(function () {		//動作部分。60fps
 if (move_ok == 1) {
 	if (lek) {
 	if (st_hit(now_stage, 4) == 5) {
@@ -723,12 +736,12 @@ if (move_ok == 1) {
 			jump.play()
 			};
 		} else if (st_hit(now_stage, 4) == 5) {
-			y_n -= 10;
+			y_n -= 4;
 			if (st_hit(now_stage, 4) == 5) {
-			y_n += 10;
+			y_n += 4;
 			y = -9;
 			} else {
-			y_n += 10;
+			y_n += 4;
 			};
 		};
 	};
@@ -865,7 +878,7 @@ for (let i3 = 1; i3 < date_stage[stb].length; i3++) {
 	
 		};
 	};
-	if (date_stage[stb][i3] == 18) {			//水判定！！
+	if (date_stage[stb][i3] == 18 || date_stage[stb][i3] == 19) {			//水判定！！
 		if (hit_x <= x_n + 20 && x_n <= hit_x + 20 && hit_y <= y_n + 40 && hit_y + 19 >= y_n) {
 		water_hit = 1;
 		};
