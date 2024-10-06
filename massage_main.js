@@ -1,10 +1,10 @@
-let massage_func_t = [0, 12, 19, 28];			//表示待ちのメッセージ番号
+let massage_func_t = [0, 12, 19, 28, 42];			//表示待ちのメッセージ番号
 let massage_talk_t = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
 let already_talk = [];		//すでに表示したメッセージ内容
-let bg_func_t = [12, 17, 19, 27, 28, 41];				//背景変更待ちのマップ番号
+let bg_func_t = [];				//背景変更済のマップ番号
 let massage_func_f = 0;				//メッセージ表示終了検知用
 
-let boss_func_f = [17, 27, 36, 40];			//ボス出す奴
+let boss_func_f = [17, 27, 36, 40, 49];			//ボス出す奴
 
 
 
@@ -22,17 +22,20 @@ print_mas("SECTION3　( ᐛ )城　本館連絡橋", 19);
 
 print_mas("SECTION4　( ᐛ )城　本館入口", 28);
 
+print_mas("SECTION5　( ᐛ )城　地下１階　貯水エリア", 42);
+
 bg_ch(1, 12);
 bg_ch(1.5, 17);
 bg_ch(2, 19);
 bg_ch(2.5, 27);
 bg_ch(3, 28);
-bg_ch(2.5, 41);
+bg_ch(5, 41);
 
 boss_das(1, 17);		//ボス出すやつ　（ボス番号,マップ番号）
 boss_das(2, 27);
 boss_das(3, 36);
 boss_das(4, 40);
+boss_das(5, 49);
 
 print_talk("٩( ᐛ )و城の門番やで", 17, 1, 1);				//("セリフ", map番号, メッセージ番号, 移動可不可(不可1、可2);
 print_talk("よわそうな棒人間やね", 17, 2, 1);
@@ -195,10 +198,12 @@ move_ok = 1;
 
 function bg_ch(bg_pat, bg_num, mas_num) {
 
-if (now_stage == bg_num && bg_func_t.includes(bg_num)) {
-bg_func_t.splice(0, 1);
-bg_p = bg_pat;
-bg_edit();
+if (now_stage == bg_num) {
+	if (bg_func_t.includes(bg_num) == false) {
+	bg_func_t.push(bg_num);
+	bg_p = bg_pat;
+	bg_edit();
+	};
 };
 
 };
@@ -257,8 +262,26 @@ now_section = 4;
 bgf.clearRect(0, 0, 800, 500);
 bgf.fillStyle = "#777777";
 bgf.fillRect(0, 0, 800, 500);
+
+bgf.lineWidth = 2;
+bgf.strokeStyle = "#400000";
+bgf.fillStyle = "#a0a0a0";
+bgf.fillRect(600, -4, 20, 608);
+bgf.strokeRect(600, -4, 20, 608);
+bgf.fillRect(400, -4, 15, 608);
+bgf.strokeRect(400, -4, 15, 608);
+bgf.fillRect(-2, 100, 804, 10);
+bgf.strokeRect(-2, 100, 804, 10);
+bgf.fillRect(390, 90, 30, 30);
+bgf.strokeRect(390, 90, 30, 30);
 };
 
+if (bg_p == 5) {		//section5
+now_section = 5;
+bgf.clearRect(0, 0, 800, 500);
+bgf.fillStyle = "#777777";
+bgf.fillRect(0, 0, 800, 500);
+};
 
 
 };
